@@ -16,7 +16,6 @@ import modelo.agendamento;
 import pi.dao.Conexao;
 import pi.dao.clienteDao;
 import modelo.cliente;
-import modelo.relatorios;
 import modelo.funcionario;
 import modelo.servico;
 import modelo.status;
@@ -91,8 +90,8 @@ public class PI {
         System.out.println(" 7 - Relatório de agendamentos em espera. ");
         System.out.println(" 8 - Relatório de agendamentos cancelados. ");
         System.out.println(" 9 - Relatório de agendamentos participantes da promoção. ");
-        System.out.println(" 10 - Ranking dos funcionários. ");
-        System.out.println(" 11 - Ranking das unidades. ");
+        System.out.println(" 10 - Ranking das unidades. ");
+        System.out.println(" 11 - Ranking dos funcionários. ");
 
         int opRelatorio = leitor.nextInt();
 
@@ -132,7 +131,7 @@ public class PI {
         funcionario func = new funcionario();
         servico serv = new servico();
         status sta = new status();
-        relatorios rel = new relatorios();
+        relatorioDao rel = new relatorioDao(conn);
 
         int op; //menu principal
         do {
@@ -287,72 +286,64 @@ public class PI {
                         case 1:
                             //Relatorio que mostra quais foram os agendamentos realizados nas unidades
                             System.out.println("****Atendimentos realizados pelas unidades****");
-                            rel.atendimento_unidade();
-                            rel.relato(rel);
+                           rel.getRelatorio_Agendamento_realizado_unid();
+                            
                             break;
                         
                         case 2:
                             //Relatorio que mostra quais foram os agendamentos realizados pelos profissionais
                             System.out.println("****Atendimentos realizados pelos profissionais****");
-                            rel.atendimento_funcionario();
-                            rel.relato(rel);
+                            rel.getRelatorio_Agendamento_realizado_func();
                             break;
                         case 3:
                             //Relatorio que mostra os agendamentos realizados, e seus clientes
-                            System.out.println("****Digite o código de seu cliente****");
-                            int cod_cliente = leitor.nextInt();
-                            rel.atendimento_cliente(cod_cliente);
-                            rel.relato(rel);
+                            System.out.println("****Digite o código do cliente****");
+                            int id_cliente1= leitor.nextInt();
+                            rel.setRelatorio_atendimento_cliente(id_cliente1);
                             break;
                         case 4:
                             //Neste é possivel verificar em qual unidade esta um funcionario. Em qual ele trabalha
                             System.out.println("****Digite o código de seu funcionario****");
-                            fun.buscar(func);
-                            int cod_funci1=leitor.nextInt();
-                            rel.funcionario_e_unidade(cod_funci1);
-                            rel.relato(rel);
+                            int id_funcionario1=leitor.nextInt();
+                            rel.setRelatorio_funcio_suaUnid(id_funcionario1);
                             break;
                         case 5:
                             //Neste é possivel pesquisar a agenda de um funcionario, ou seja, os agendamentos que ele possui
                             System.out.println("****Digite o código de seu funcionario****");
-                            fun.buscar(func);
-                            int cod_funci2=leitor.nextInt();
-                            rel.funcionario_e_agenda(cod_funci2);
-                            rel.relato(rel);      
+                            int id_funcionario2=leitor.nextInt();
+                            
+                            rel.setRelatorio_funcio_suaAgenda(id_funcionario2);
+                            
+                            break;
                         case 6:
                             //Apresenta a agenda para o dia atual,de uma unidade
                             System.out.println("*****Agendamentos de hoje*****");
                             System.out.println("Escolha sua unidade: ");
-                            uni.buscar(unidade1);
-                            int unid=leitor.nextInt();
-                            rel.agendamento_dia(unid);
-                            rel.relato(rel);
+                            int unidade_hj=leitor.nextInt();
+                            rel.setRelatorio_Agendamento_dia(unidade_hj);
                             break;
                             
                         case 7:
-                            System.out.println("*****Cancelados*****");
-                            rel.agendamento_cancelado();
-                            rel.relato(rel);
+                            System.out.println("*****Em espera*****");
+                            rel.getRelatorio_Agendamento_emEspera();
                             break;
                         case 8:
-                            System.out.println("*****Em espera*****");
-                            rel.agendamento_espera();
-                            rel.relato(rel);
+                            System.out.println("*****Cancelados*****");
+                            rel.getRelatorio_Agendamento_cancelados();
                             break;
                         case 9:
                             System.out.println("**Quantidade de Participantes da promoção- por unidade**");
-                            rel.agendamento_promocao();
-                            rel.relato(rel);
+                            System.out.println("Digite o nome da unidade que você deseja verificar: ");   
+                            String nome_unid=leitor.nextLine();
+                            rel.setRelatorio_Agendamento_promocao(nome_unid);
                             break;
                         case 10:
                             System.out.println("***Ranking das unidades***");
-                            rel.ranking_unidade();
-                            rel.relato(rel);
+                            rel.getRanking_Unidade();
                             break;
                         case 11:
                             System.out.println("***Ranking dos funcionarios***");
-                            rel.ranking_unidade();
-                            rel.ranking_funcionario();
+                            rel.getRanking_funcionario();
                             break;
                         }  
                     break;
